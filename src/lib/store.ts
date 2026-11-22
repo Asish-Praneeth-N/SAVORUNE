@@ -1170,6 +1170,67 @@ class Store {
   }
 
   // Open Pickups for Volunteers (FR-E7, FR-F13)
+  public getPickupById(
+    pickupId: string,
+    caller: { role: UserRole; userId: string }
+  ): Pickup | undefined {
+    this.sweepExpiries();
+    const pickup = this.state.pickups.find((item) => item.id === pickupId);
+    if (!pickup) return undefined;
+
+    const donation = this.state.donations.find((item) => item.id === pickup.donationId);
+    const claim = this.state.claims.find((item) => item.id === pickup.claimId);
+    if (!donation || !claim) return undefined;
+
+    const donor = this.getDonorProfileByUserId(caller.userId);
+    const receiver = this.getReceiverProfileByUserId(caller.userId);
+    const volunteer = this.getVolunteerProfileByUserId(caller.userId);
+    const isDonorOwner = donor?.id === donation.donorId;
+    const isClaimantReceiver = receiver?.id === claim.receiverId;
+    const isAssignedVolunteer = volunteer?.id === pickup.volunteerId;
+    const isOpenForVolunteer = Boolean(
+      volunteer &&
+      pickup.collectorType === 'VOLUNTEER' &&
+      pickup.status === 'UNASSIGNED'
+    );
+    const isAdmin = caller.role === 'ADMIN';
+
+    if (!isAdmin && !isDonorOwner && !isClaimantReceiver && !isAssignedVolunteer && !isOpenForVolunteer) {
+      throw {
+        status: 403,
+        code: 'FORBIDDEN',
+        message: 'You do not have access to this pickup.',
+      };
+    }
+
+    const canSeeOperationalDetails =
+      isAdmin || isDonorOwner || isClaimantReceiver || isAssignedVolunteer;
+    const receiverProfile = this.state.receiverProfiles.find((item) => item.id === claim.receiverId);
+    const assignedVolunteer = pickup.volunteerId
+      ? this.state.volunteerProfiles.find((item) => item.id === pickup.volunteerId)
+      : undefined;
+    const publicZone = SYNTHETIC_ZONES.find((zone) => zone.code === donation.donorZoneCode);
+
+    return {
+      ...pickup,
+      handoffPin: null,
+      receiverName: receiverProfile?.organizationName,
+      volunteerName: assignedVolunteer?.displayName,
+      donation: {
+        ...donation,
+        urgency: getUrgency(donation.pickupDeadline) as any,
+        pickupInstructions: canSeeOperationalDetails ? donation.pickupInstructions : null,
+        pickupLatitude: canSeeOperationalDetails
+          ? donation.pickupLatitude
+          : publicZone?.latitude ?? donation.pickupLatitude,
+        pickupLongitude: canSeeOperationalDetails
+          ? donation.pickupLongitude
+          : publicZone?.longitude ?? donation.pickupLongitude,
+        handoffPin: null,
+      },
+    };
+  }
+
   public getPickups(params: {
     scope?: 'open' | 'mine' | 'all';
     volunteerUserId?: string;

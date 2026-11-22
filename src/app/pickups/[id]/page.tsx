@@ -21,6 +21,18 @@ import { CountdownTimer } from '@/components/countdown-timer';
 import { CollectorPinInput } from '@/components/handoff-pin-card';
 import { SafetyCard } from '@/components/safety-card';
 
+async function readJsonResponse(response: Response) {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(
+      response.ok
+        ? 'The server returned an unexpected response.'
+        : `Request failed with status ${response.status}. Please refresh and try again.`
+    );
+  }
+  return response.json();
+}
+
 export default function PickupDetailPage({
   params,
 }: {
@@ -41,19 +53,22 @@ export default function PickupDetailPage({
   const fetchPickup = useCallback(async () => {
     try {
       const [resPickup, resMe] = await Promise.all([
-        fetch(`/api/pickups`),
+        fetch(`/api/pickups/${id}`),
         fetch('/api/me'),
       ]);
-      const jsonPickup = await resPickup.json();
-      const jsonMe = await resMe.json();
+      const [jsonPickup, jsonMe] = await Promise.all([
+        readJsonResponse(resPickup),
+        readJsonResponse(resMe),
+      ]);
 
       if (jsonPickup.data) {
-        const found = jsonPickup.data.find((p: Pickup) => p.id === id);
-        if (found) setPickup(found);
+        setPickup(jsonPickup.data);
+      } else {
+        setError(jsonPickup.error?.message || 'Pickup not found.');
       }
       if (jsonMe.data) setCurrentUser(jsonMe.data.user);
-    } catch (e) {
-      console.error(e);
+    } catch (e: any) {
+      setError(e.message || 'Unable to load pickup details.');
     } finally {
       setLoading(false);
     }
@@ -78,7 +93,7 @@ export default function PickupDetailPage({
           handoffPin: enteredPin,
         }),
       });
-      const json = await res.json();
+      const json = await readJsonResponse(res);
       if (!res.ok) {
         throw new Error(json.error?.message || 'Collection confirmation failed');
       }
@@ -102,7 +117,7 @@ export default function PickupDetailPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'DELIVERED' }),
       });
-      const json = await res.json();
+      const json = await readJsonResponse(res);
       if (!res.ok) {
         throw new Error(json.error?.message || 'Delivery confirmation failed');
       }
@@ -127,7 +142,7 @@ export default function PickupDetailPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'WITHDRAW', reason: withdrawReason || 'Volunteer unable to complete' }),
       });
-      const json = await res.json();
+      const json = await readJsonResponse(res);
       if (!res.ok) {
         throw new Error(json.error?.message || 'Withdrawal failed');
       }
