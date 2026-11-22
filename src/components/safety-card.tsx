@@ -48,7 +48,7 @@ export function SafetyCard({
           Food Safety & Handling Information
         </h3>
         <span className="text-xs bg-natural/10 text-natural font-medium px-2.5 py-0.5 rounded-full">
-          PRD Guardrail
+          Safety Information
         </span>
       </div>
 

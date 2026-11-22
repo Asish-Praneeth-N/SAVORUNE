@@ -26,7 +26,13 @@ export async function GET(req: NextRequest) {
         if (scope === 'open') {
           return pickup.status === 'UNASSIGNED' && pickup.collectorType === 'VOLUNTEER';
         }
-        return pickup.volunteerId === ctx.volunteerProfile?.id;
+        if (scope === 'mine') {
+          return pickup.volunteerId === ctx.volunteerProfile?.id;
+        }
+        return (
+          pickup.volunteerId === ctx.volunteerProfile?.id ||
+          (pickup.status === 'UNASSIGNED' && pickup.collectorType === 'VOLUNTEER')
+        );
       });
     } else if (ctx.user.role === 'DONOR') {
       pickups = pickups.filter(

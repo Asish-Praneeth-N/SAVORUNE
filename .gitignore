@@ -21,3 +21,5 @@ node_modules
 *.db-wal
 *.db-shm
 data/savorune-db.json
+.codebenders/*
+!.codebenders/state.json

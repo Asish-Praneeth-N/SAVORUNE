@@ -40,7 +40,7 @@ export default function ImpactDashboardPage() {
             Redistribution Impact Dashboard
           </h1>
           <p className="text-xs text-forest/70 mt-1">
-            Calculated strictly from verified DELIVERED donations (PRD Section 20).
+            Calculated strictly from confirmed delivered donations.
           </p>
         </div>
 
@@ -80,17 +80,17 @@ export default function ImpactDashboardPage() {
           <div className="flex items-center justify-between border-b border-forest/10 pb-3">
             <h2 className="font-heading text-base font-bold text-forest flex items-center gap-2">
               <Info className="w-5 h-5 text-natural" />
-              How We Calculate This (PRD Section 20)
+              How We Calculate This
             </h2>
             <span className="font-mono text-xs px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-semibold">
-              Synthetic Demo Data
+              Transparent Assumptions
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1.5 p-3.5 bg-background rounded-xl border border-forest/10">
               <strong className="text-forest uppercase tracking-wider font-mono">
-                1. Delivered Donations Only (BL-08)
+                Delivered Donations Only
               </strong>
               <p className="text-forest/80 leading-relaxed">
                 POSTED, CLAIMED, COLLECTED, EXPIRED, and CANCELLED donations are never counted as impact. Only donations verified as DELIVERED by the collector/receiver enter impact queries.

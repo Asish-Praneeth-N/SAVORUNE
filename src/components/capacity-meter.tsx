@@ -19,7 +19,7 @@ export function CapacityMeter({
       <div className="flex items-center justify-between text-xs">
         <span className="font-bold text-forest flex items-center gap-1.5 uppercase tracking-wider">
           <Scale className="w-4 h-4 text-natural" />
-          Remaining Daily Capacity (FR-E8)
+          Remaining Daily Capacity
         </span>
         <span className="font-mono font-bold text-natural text-sm">
           {remainingCapacityKg.toFixed(1)} kg left

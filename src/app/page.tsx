@@ -311,7 +311,7 @@ export default async function LandingPage() {
           </div>
 
           <div data-reveal="left" className="mt-10 inline-flex items-center gap-2 rounded-full border border-natural/20 bg-natural/5 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[.12em] text-natural">
-            <span className="size-1.5 rounded-full bg-natural" /> Synthetic demo data
+            <span className="size-1.5 rounded-full bg-natural" /> Privacy-safe service-zone data
           </div>
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

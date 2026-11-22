@@ -244,7 +244,7 @@ export default function QuickDonationPage() {
             Quick Donation
           </h1>
           <p className="text-xs text-forest/70 mt-1">
-            Publish surplus food in under 60 seconds (PRD Mandatory Requirement 1)
+            Publish surplus food in under 60 seconds
           </p>
         </div>
         <Link

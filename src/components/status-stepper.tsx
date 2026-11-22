@@ -76,7 +76,7 @@ export function StatusStepper({
       {history.length > 0 && (
         <div className="mt-4 pt-3 border-t border-forest/10 space-y-2">
           <h4 className="text-xs font-bold uppercase tracking-wider text-forest/70">
-            Lifecycle Audit Log (PRD Section 16.2)
+            Lifecycle History
           </h4>
           <div className="space-y-1.5 max-h-48 overflow-y-auto">
             {history.map((h, i) => (

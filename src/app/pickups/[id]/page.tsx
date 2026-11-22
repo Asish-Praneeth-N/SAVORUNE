@@ -74,6 +74,34 @@ export default function PickupDetailPage({
     }
   }, [id]);
 
+  const handleAssignment = async (
+    action: 'SELF_COLLECT' | 'OPEN_TO_VOLUNTEERS' | 'ACCEPT'
+  ) => {
+    setActionLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/pickups/${id}/assign`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const json = await readJsonResponse(res);
+      if (!res.ok) throw new Error(json.error?.message || 'Pickup assignment failed');
+      setSuccessMsg(
+        action === 'SELF_COLLECT'
+          ? 'Self-collection selected. Ask the donor for the handoff PIN when your representative arrives.'
+          : action === 'OPEN_TO_VOLUNTEERS'
+          ? 'Pickup opened to the volunteer network.'
+          : 'Pickup accepted. Ask the donor for the handoff PIN at collection.'
+      );
+      await fetchPickup();
+    } catch (err: any) {
+      setError(err.message || 'Pickup assignment failed');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPickup();
     const interval = setInterval(fetchPickup, 10000);
@@ -182,6 +210,7 @@ export default function PickupDetailPage({
   const isAccepted = pickup.status === 'ACCEPTED';
   const isCollected = pickup.status === 'COLLECTED';
   const isDelivered = pickup.status === 'DELIVERED';
+  const isUnassigned = pickup.status === 'UNASSIGNED';
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
@@ -272,6 +301,31 @@ export default function PickupDetailPage({
       </div>
 
       {/* ACTION BLOCK ACCORDING TO STATE */}
+      {isUnassigned && currentUser?.role === 'RECEIVER' && pickup.collectorType === null && (
+        <div className="rounded-2xl border-2 border-natural/30 bg-surface p-6 shadow-md space-y-4">
+          <div>
+            <h2 className="font-heading text-lg font-bold text-forest">Choose who will collect</h2>
+            <p className="mt-1 text-sm text-forest/65">Select one method. The chosen collector must enter the donor handoff PIN before collection is recorded.</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <button type="button" disabled={actionLoading} onClick={() => handleAssignment('SELF_COLLECT')} className="btn-primary justify-center">Receiver Self-Collect</button>
+            <button type="button" disabled={actionLoading} onClick={() => handleAssignment('OPEN_TO_VOLUNTEERS')} className="btn-secondary justify-center">Open to Volunteers</button>
+          </div>
+        </div>
+      )}
+
+      {isUnassigned && currentUser?.role === 'VOLUNTEER' && pickup.collectorType === 'VOLUNTEER' && (
+        <div className="rounded-2xl border-2 border-natural/30 bg-surface p-6 shadow-md space-y-4">
+          <div>
+            <h2 className="font-heading text-lg font-bold text-forest">Accept this rescue pickup</h2>
+            <p className="mt-1 text-sm text-forest/65">Accept only if you can collect before the deadline and complete delivery.</p>
+          </div>
+          <button type="button" disabled={actionLoading} onClick={() => handleAssignment('ACCEPT')} className="btn-primary justify-center">
+            {actionLoading ? 'Accepting Pickup…' : 'Accept Pickup'}
+          </button>
+        </div>
+      )}
+
       {/* 1. Step: Confirm Collection (PIN or Self-Collect) */}
       {isAccepted && (
         <div className="rounded-2xl border-2 border-natural/40 bg-surface p-6 shadow-md space-y-4">
@@ -282,28 +336,11 @@ export default function PickupDetailPage({
             </h2>
           </div>
 
-          {pickup.collectorType === 'RECEIVER' ? (
-            <div className="space-y-3">
-              <p className="text-xs text-forest/80 leading-relaxed">
-                As the receiver representative, once you arrive at the donor kitchen and inspect the surplus portions, click below to confirm collection:
-              </p>
-              <button
-                onClick={() => handleConfirmCollected()}
-                disabled={actionLoading}
-                className="w-full rounded-xl bg-natural py-3 text-sm font-bold text-background hover:bg-natural/90 transition-colors shadow-sm"
-              >
-                {actionLoading ? 'Confirming...' : 'Confirm Surplus Collected'}
-              </button>
-            </div>
-          ) : (
-            <div>
-              <CollectorPinInput
-                onSubmitPin={(pin) => handleConfirmCollected(pin)}
-                loading={actionLoading}
-                error={error}
-              />
-            </div>
-          )}
+          <CollectorPinInput
+            onSubmitPin={(pin) => handleConfirmCollected(pin)}
+            loading={actionLoading}
+            error={error}
+          />
 
           {/* Volunteer Withdraw Action (P1) */}
           {pickup.collectorType === 'VOLUNTEER' && (

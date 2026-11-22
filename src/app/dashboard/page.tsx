@@ -399,10 +399,10 @@ export default function UnifiedDashboardPage() {
             {/* Daily Capacity Panel */}
             <div className="rounded-2xl border border-forest/15 bg-surface p-6 shadow-sm space-y-4">
               <h3 className="font-heading font-bold text-base text-forest">
-                Daily Capacity Guardrail
+                Daily Capacity Limit
               </h3>
               <p className="text-xs text-forest/70">
-                To prevent food spoilage, receivers cannot claim surplus exceeding their verified daily handling capacity (Rule E2_CAPACITY).
+                To prevent over-commitment, receivers cannot claim surplus exceeding their declared daily handling capacity.
               </p>
               <CapacityMeter dailyCapacityKg={60} committedTodayKg={15} remainingCapacityKg={45} />
               <div className="pt-2 border-t border-forest/10 text-[11px] text-forest/60 font-mono">

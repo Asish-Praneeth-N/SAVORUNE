@@ -19,7 +19,7 @@ export function DonorHandoffPinDisplay({ pin }: { pin?: string | null }) {
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold text-natural flex items-center gap-1.5 uppercase tracking-wider">
           <KeyRound className="w-4 h-4 text-natural" />
-          Handoff Verification PIN (P1)
+          Handoff Verification PIN
         </span>
         <span className="text-[11px] text-forest/60 bg-white/70 px-2 py-0.5 rounded">
           Confidential to Donor

@@ -10,7 +10,7 @@ const requirements = [
 ];
 
 const guardrails = [
-  ['Synthetic locations', 'All locations use zone centroids inside the demonstration area; the product does not require real addresses.'],
+  ['Privacy-safe locations', 'All locations use synthetic zone centroids inside the service area; the product does not require real addresses.'],
   ['Private by design', 'Free-text fields reject personal phone numbers and email addresses.'],
   ['No certification claims', 'SAVORUNE coordinates logistics and does not certify that food is safe.'],
   ['No financial promises', 'Impact records do not imply tax, CSR, or legal benefits.'],

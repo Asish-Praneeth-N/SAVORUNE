@@ -1395,7 +1395,7 @@ class Store {
       assumptions: {
         gramsPerMeal,
         wasteAvoidedBasis:
-          'Assumes recorded surplus food would otherwise have been discarded as food waste (PRD Assumption A14).',
+          'Assumes recorded surplus food would otherwise have been discarded as food waste.',
         co2eFactorSource: this.state.impactSettings.co2eSourceNote || undefined,
       },
       dataOrigin: 'SYNTHETIC_DEMO',

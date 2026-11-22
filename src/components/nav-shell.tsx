@@ -143,7 +143,7 @@ export function NavShell({ children }: { children: React.ReactNode }) {
                   <span className="grid size-9 place-items-center rounded-xl bg-lime text-forest"><Leaf className="size-[18px]" /></span>SAVORUNE
                 </div>
                 <p className="mt-4 max-w-sm text-sm leading-7 text-white/60">Every portion deserves a purpose. Smart food rescue for donors, community organizations and volunteers.</p>
-                <p className="mt-4 text-xs font-bold uppercase tracking-[.12em] text-lime">Synthetic demonstration platform</p>
+                <p className="mt-4 text-xs font-bold uppercase tracking-[.12em] text-lime">Privacy-safe food rescue</p>
               </div>
               <div>
                 <p className="text-sm font-extrabold">Platform</p>
