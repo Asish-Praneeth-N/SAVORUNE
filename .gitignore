@@ -16,7 +16,6 @@ node_modules
 
 # Nexen — secrets and diagnostics
 .env.*.local
-.codebenders/
 *.db
 *.db-journal
 *.db-wal

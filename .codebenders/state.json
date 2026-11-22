@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "project": "SAVORUNE",
+  "createdAt": "2026-11-21T13:45:39.821Z",
+  "updatedAt": "2026-11-22T15:30:00+05:30",
+  "lastUpdated": "2026-11-22T15:30:00+05:30",
+  "phases": {
+    "phase0": "completed",
+    "phase1": "completed",
+    "phase2": "completed",
+    "phase3": "completed",
+    "phase4": "completed",
+    "phase5": "completed",
+    "phase6": "completed",
+    "phase7": "completed",
+    "phase8": "in_progress"
+  },
+  "settings": {
+    "framework": "nextjs-monolith",
+    "serviceArea": "hyderabad",
+    "database": "neon-postgresql",
+    "authentication": "clerk",
+    "maps": "google-maps"
+  }
+}
